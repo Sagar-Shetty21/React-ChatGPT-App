@@ -47,27 +47,35 @@ function App() {
   }
 
   async function handleSubmit(e){
-    e.preventDefault();
     let chatlogNew = [...chatlog, {user: "me", message: `${input}`}]
-    setInput("");
-    setChatlog(chatlogNew);
-    const messages = chatlogNew.map((message) => message.message)
-    const response = await fetch("https://react-chatgpt-server.vercel.app/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: messages,
-        currentModel,
-        currentTemperature,
-        currentToken,
-      })
-    });
-    const data = await response.json();
-    console.log(data.message.replace('/n'));
-    setChatlog([...chatlogNew, {user: "gpt", message: `${data.message.replace('/n')}`}])
-    
+    try{
+      e.preventDefault();
+      setInput("");
+      setChatlog(chatlogNew);
+      const messages = chatlogNew.map((message) => message.message)
+      const response = await fetch("https://react-chatgpt-server.vercel.app/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: messages,
+          currentModel,
+          currentTemperature,
+          currentToken,
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      setChatlog([...chatlogNew, {user: "gpt", message: `${data.message.replace('/n')}`}])
+    } catch (error) {
+      console.error("Error:", error.message);
+      setChatlog([...chatlogNew, {user: "gpt", message: "Something went wrong, Please try again!", error: true}])
+    }
   }
 
   return (

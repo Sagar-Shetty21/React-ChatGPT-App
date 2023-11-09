@@ -108,6 +108,10 @@
   display: none;          /* Safari and Chrome */
 }
 
+.red-text{
+  color: rgb(187, 38, 38);
+}
+
 .text-format{
   white-space: pre-wrap;
 }
