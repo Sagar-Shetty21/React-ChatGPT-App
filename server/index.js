@@ -1,5 +1,4 @@
 
-
 const { Configuration, OpenAIApi } = require("openai");
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -13,21 +12,11 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-/* async function callapi(){  
-    const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: "Say this is a test",
-        max_tokens: 7,
-        temperature: 0,
-    });
-    console.log(response.data.choices[0].text)
-} */
-
 
 
 const app = express()
-app.use(bodyParser.json())
-app.use(cors())
+app.use(cors());
+app.use(bodyParser.json());
 const port = process.env.PORT || 5050
 
 app.post('/', async (req,res) => {
@@ -53,5 +42,5 @@ app.get('/models', async (req,res) => {
 });
 
 app.listen(port, () => {
-    console.log(`example app listening at http://localhost:${process.env.PORT}`)
+    console.log(`example app listening at http://localhost:${port}`)
 });
